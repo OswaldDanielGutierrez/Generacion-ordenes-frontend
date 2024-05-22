@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body class="body-container">
+    <header class="mc-header">
+        <h4 class="logo">Mecatico Company</h4>
+    </header>
+
+    <main class="main-container">
+
+        <div class="order center">
+            <h1>Generación orden de compra</h1>
+        </div>
+
+        <div class="slogan center">
+            <h1>
+                <span>Tu información, nuestro propósito.</span><br>
+                <span>¡Completa el formulario y lograremos más!</span>
+            </h1>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form class="form-container" [formGroup]="form">
+
+                    <div class="nombre mb-2">
+                        <label class="form-label">
+                            Nombre completo
+                        </label>
+
+                        <input type="text" formControlName="nombre" class="form-input">
+
+                        <div class="error-message" [hidden]="nombre.valid || nombre.untouched">
+                            Este campo es requerido
+                        </div>
+                    </div>
+
+                    <div class="numeroDocumento mb-2">
+                        <label class="form-label">
+                            Número de documento / NIT
+                        </label>
+
+                        <input type="number" formControlName="numeroDocumento" class="form-input"
+                            (click)="marcarComoTocado()">
+
+
+                        <div class="error-message" [hidden]="numeroDocumento.valid || !numeroDocumento.touched">
+                            <span *ngIf="numeroDocumento?.errors?.['required']">
+                                Este campo es requerido: solo se permiten números
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="telefono mb-2">
+                        <label class="form-label">
+                            Número de télefono
+                        </label>
+
+                        <input type="number" formControlName="telefono" class="form-input"
+                            (click)="marcarComoTocadoTelefono()">
+                        <div class="error-message" [hidden]="telefono.valid || !telefono.touched">
+                            <span *ngIf="telefono?.errors?.['required']">
+                                Este campo es requerido: solo se permiten números
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="productos mb-2">
+                        <label class="form-label">Productos</label>
+
+                        <select formControlName="productos" class="form-input">
+                            <option value="" disabled selected>Selecciona un producto</option>
+                            <option *ngFor="let producto of productosDisponibles" [value]="producto">{{ producto }}
+                            </option>
+                        </select>
+
+                        <div class="seleccionProductos">
+                            <span class="text-cantidad">Cantidad: </span>
+
+                            <input type="number" formControlName="cantidad" class="cantidad-input">
+
+                            <button class="btnProducto" (click)="agregarProducto(productos.value)"
+                                [disabled]="!productos.value || !form.get('cantidad')?.valid">Agregar</button>
+                        </div>
+
+                        <ul *ngIf="productosSeleccionados.length > 0">
+                            <li *ngFor="let producto of productosSeleccionados; let i = index">
+                                {{ producto.nombre }} - Cantidad: {{ producto.cantidad }}
+                                <button class="btnProducto" (click)="eliminarProducto(i)">Eliminar</button>
+                            </li>
+                        </ul>
+
+                        <div class="error-message" [hidden]="productos.valid || productos.untouched">Este campo es
+                            requerido: Selecciona un producto</div>
+
+                    </div>
+
+
+
+                </form>
+            </div>
+        </div>
+        <div class="buttonContinuar">
+            <button type="submit" class="btn" [disabled]="form.invalid || productosSeleccionados.length === 0"
+                (click)="guardarDatosFormulario()">
+                Continuar
+            </button>
+        </div>
+
+
+    </main>
+
+</body>
+
+</html>
